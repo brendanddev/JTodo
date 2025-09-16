@@ -90,6 +90,33 @@ public class TodoDAO {
         return todos;
     }
 
+    public List<Todo> searchTodos(String keyword) {
+        List<Todo> todos = new ArrayList<>();
+        String sql = "SELECT * FROM todos WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC";
+
+        try (Connection connection = getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            String pattern = "%" + keyword + "%";
+            stmt.setString(1, pattern);
+            stmt.setString(2, pattern);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                todos.add(new Todo(
+                    rs.getInt("id"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getString("status"),
+                    rs.getString("created_at")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
+    }
+
     public boolean deleteTodo(int id) throws SQLException {
         boolean rowDeleted;
         try (Connection connection = getConnection();

@@ -9,6 +9,15 @@
 <body>
 <div class="container">
     <h2>Todo List</h2>
+
+    <!-- Search To Dos -->
+    <form action="todos" method="get" style="margin-bottom: 1rem;">
+        <input type="hidden" name="action" value="search" />
+        <input type="text" name="keyword" placeholder="Search todos..." value="${param.keyword}" />
+        <button type="submit" class="btn search-btn">Search</button>
+        <a class="btn reset-btn" href="todos">Reset</a>
+    </form>
+
     <a class="add-btn" href="todos?action=new">Add New Todo</a>
     <table>
         <tr>

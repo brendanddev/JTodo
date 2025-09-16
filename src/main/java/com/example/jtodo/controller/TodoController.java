@@ -40,6 +40,9 @@ public class TodoController extends HttpServlet {
                 case "update":
                     updateTodo(request, response);
                     break;
+                case "search":
+                    searchToDos(request, response);
+                    break;
                 default:
                     listTodos(request, response);
                     break;
@@ -125,5 +128,16 @@ public class TodoController extends HttpServlet {
         }
         todoDAO.deleteTodo(id);
         response.sendRedirect(request.getContextPath() + "/todos");
+    }
+
+    private void searchToDos(HttpServletRequest request, HttpServletResponse response) 
+            throws SQLException, IOException, ServletException {
+        String keyword = request.getParameter("keyword");
+        List<Todo> todos = todoDAO.searchTodos(keyword);
+        
+        request.setAttribute("todos", todos);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/todo-list.jsp");
+        dispatcher.forward(request, response);
+
     }
 }
